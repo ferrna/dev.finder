@@ -5,7 +5,7 @@ import { Room, room } from '@/db/schema'
 import { getSession } from '@/lib/auth'
 import { revalidatePath } from 'next/cache'
 
-export const createRoomAction = async (roomData: Omit<Room, 'userId'>) => {
+export const createRoomAction = async (roomData: Omit<Room, 'userId' | 'id'>) => {
   const session = await getSession()
 
   if (!session) {
