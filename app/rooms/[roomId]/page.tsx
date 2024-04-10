@@ -1,3 +1,4 @@
+import { ListTags, splitTags } from '@/components/listTags'
 import { Badge } from '@/components/ui/badge'
 import { DropdownMenuSeparator } from '@/components/ui/dropdown-menu'
 import { getRoom } from '@/data-access/rooms'
@@ -13,7 +14,6 @@ export default async function Room({ params }: { params: { roomId: string } }) {
       </div>
     )
   }
-  const languages = room?.language.split(',').map((lang) => lang.trim())
   return (
     <div className="grid grid-cols-4 min-h-screen">
       <div className="col-span-3 p-4 pr-2">
@@ -29,8 +29,8 @@ export default async function Room({ params }: { params: { roomId: string } }) {
           <p className="leading-7 my-3 text-gray-800 dark:text-gray-300">
             {room?.description}
           </p>
-          <div className="flex flex-wrap gap-1 pb-3">
-            {languages && languages.map((lang) => <Badge key={lang}>{lang}</Badge>)}
+          <div className="pb-3">
+            <ListTags tags={splitTags(room?.tags)} />
           </div>
           <DropdownMenuSeparator />
           {room.githubRepo && (
