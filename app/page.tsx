@@ -12,6 +12,7 @@ import { Room } from '@/db/schema'
 import { GithubIcon } from 'lucide-react'
 import { getRooms } from '@/data-access/rooms'
 import { ListTags, splitTags } from '@/components/listTags'
+import SearchBar from './search-bar'
 
 function RoomCard({ room }: { room: Room }) {
   return (
@@ -43,16 +44,22 @@ function RoomCard({ room }: { room: Room }) {
   )
 }
 
-export default async function Home() {
-  // const rooms = await db.query.room.findMany()
-  const rooms = await getRooms()
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: { search: string }
+}) {
+  const rooms = await getRooms(searchParams?.search)
   return (
     <main className="min-h-screen p-16 pt-14">
       <div className="container flex justify-between items-center mb-8">
         <h1 className="text-4xl">Find Dev Rooms</h1>
-        <Button asChild>
+        <Button asChild className="text-lg">
           <Link href="/create-room">Create Room</Link>
         </Button>
+      </div>
+      <div className="container my-4">
+        <SearchBar />
       </div>
       <div className="container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {rooms.map((room) => {

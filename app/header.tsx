@@ -29,17 +29,17 @@ function Dropdown() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        {session.data ? (
-          <DropdownMenuItem onClick={() => signOut()} className="cursor-pointer">
-            <LogOut />
-            &nbsp; Sign Out
-          </DropdownMenuItem>
-        ) : (
-          <DropdownMenuItem onClick={() => signIn('google')} className="cursor-pointer">
-            <LogIn />
-            &nbsp; Sign In
-          </DropdownMenuItem>
-        )}
+        <DropdownMenuItem
+          onClick={() =>
+            signOut({
+              callbackUrl: '/',
+            })
+          }
+          className="cursor-pointer"
+        >
+          <LogOut />
+          &nbsp; Sign Out
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )
@@ -59,7 +59,14 @@ export default function Header() {
           <span className="pl-1 tracking-tight">DevFinder</span>
         </Link>
         <div className="flex items-center gap-4">
-          <Dropdown />
+          {session.data ? (
+            <Dropdown />
+          ) : (
+            <Button onClick={() => signIn('google')} className="cursor-pointer">
+              <LogIn />
+              &nbsp; Sign In
+            </Button>
+          )}
           <ModeToggle />
         </div>
       </div>
