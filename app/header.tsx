@@ -5,9 +5,10 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { LogIn, LogOut } from 'lucide-react'
+import { Airplay, LogIn, LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import Image from 'next/image'
@@ -29,6 +30,12 @@ function Dropdown() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
+        <DropdownMenuItem className="cursor-pointer" asChild>
+          <Link href="/your-rooms">
+            <Airplay />
+            &nbsp; Your Rooms
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() =>
             signOut({
@@ -46,8 +53,9 @@ function Dropdown() {
 }
 export default function Header() {
   const session = useSession()
+  const isLoggedIn = !!session.data
   return (
-    <header className="py-2 bg-gray-100 dark:bg-gray-900 container mx-auto">
+    <header className="py-2 bg-gray-100 bg-transparent dark:bg-gray-900 container mx-auto z-10 relative">
       <div className="flex justify-between items-center">
         <Link
           href="/"
@@ -58,11 +66,21 @@ export default function Header() {
           <Image src="/icon.png" alt="Dev Finder" width={60} height={60} />
           <span className="pl-1 tracking-tight">DevFinder</span>
         </Link>
+        <nav>
+          <Button asChild variant={'ghost'} className="mr-2">
+            <Link href="/browse">Browse</Link>
+          </Button>
+          {isLoggedIn && (
+            <Button asChild variant={'ghost'}>
+              <Link href="/your-rooms">Your Rooms</Link>
+            </Button>
+          )}
+        </nav>
         <div className="flex items-center gap-4">
-          {session.data ? (
+          {isLoggedIn ? (
             <Dropdown />
           ) : (
-            <Button onClick={() => signIn('google')} className="cursor-pointer">
+            <Button onClick={() => signIn()} className="cursor-pointer">
               <LogIn />
               &nbsp; Sign In
             </Button>

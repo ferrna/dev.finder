@@ -13,7 +13,8 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { createRoomAction } from './actions'
+import { editRoomAction } from './actions'
+import { Room } from '@/db/schema'
 
 const formSchema = z.object({
   name: z.string().min(1).max(50),
@@ -22,19 +23,19 @@ const formSchema = z.object({
   githubRepo: z.string().max(50),
 })
 
-export function CreateRoomForm() {
+export function EditRoomForm({ room }: { room: Room }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: '',
-      description: '',
-      tags: '',
-      githubRepo: '',
+      name: room.name ?? '',
+      description: room.description ?? '',
+      tags: room.tags ?? '',
+      githubRepo: room.githubRepo ?? '',
     },
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    createRoomAction(values)
+    editRoomAction(values, room.id)
   }
   return (
     <div className="">

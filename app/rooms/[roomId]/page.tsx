@@ -1,12 +1,14 @@
-import { ListTags, splitTags } from '@/components/listTags'
-import { Badge } from '@/components/ui/badge'
+import { ListTags } from '@/components/listTags'
 import { DropdownMenuSeparator } from '@/components/ui/dropdown-menu'
 import { getRoom } from '@/data-access/rooms'
 import { GithubIcon } from 'lucide-react'
 import Link from 'next/link'
 import { VideoPlayer } from './videoPlayer'
+import { splitTags } from '@/lib/utils'
+import { unstable_noStore } from 'next/cache'
 
 export default async function Room({ params }: { params: { roomId: string } }) {
+  unstable_noStore()
   const room = await getRoom(params.roomId)
   if (!room) {
     return (

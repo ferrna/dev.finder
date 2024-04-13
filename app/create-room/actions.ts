@@ -1,18 +1,24 @@
 'use server'
 
-import { db } from '@/db'
-import { Room, room } from '@/db/schema'
+import { createRoom } from '@/data-access/rooms'
+import { Room } from '@/db/schema'
 import { getSession } from '@/lib/auth'
 import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 
 export const createRoomAction = async (roomData: Omit<Room, 'userId' | 'id'>) => {
   const session = await getSession()
 
-  if (!session) {
+  if (!session?.user) {
     throw new Error('you must be logged in to create a room')
   }
 
-  await db.insert(room).values({ ...roomData, userId: session.user?.id })
+  const response = await createRoom(roomData, session.user.id)
 
-  revalidatePath('/')
+  if (response?.insertedId) {
+    revalidatePath('/browse')
+    redirect(`/rooms/${response?.insertedId}`)
+  } else {
+    redirect('/browse')
+  }
 }
