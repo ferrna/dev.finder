@@ -37,16 +37,18 @@ export default async function Room({ params }: { params: { roomId: string } }) {
             <ListTags tags={splitTags(room?.tags)} />
           </div>
           <DropdownMenuSeparator />
-          {room.githubRepo && (
-            <Link
-              href={`/room/${room.id}`}
+          {room.githubRepo ? (
+            <a
+              href={`${room.githubRepo}`}
               target="_blank"
               className="flex items-center gap-2 pt-2 justify-center hover:underline"
               rel="noopener noreferrer"
             >
               <GithubIcon className="w-6 h-6" />
               Github Project
-            </Link>
+            </a>
+          ) : (
+            <span>no repository</span>
           )}
         </div>
       </div>

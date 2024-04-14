@@ -118,7 +118,7 @@ export function CreateRoomForm() {
                   <Input {...field} placeholder="https://github.com/username/project" />
                 </FormControl>
                 <FormDescription>
-                  Please put a link to the project you are working on.
+                  Please put a link to the project you are working on. (Optional)
                 </FormDescription>
                 <FormMessage />
               </FormItem>
