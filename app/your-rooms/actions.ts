@@ -10,7 +10,7 @@ export async function deleteUserRoom(roomId: string) {
   const room = await getRoom(roomId)
   if (room?.userId !== session.user.id) throw new Error('User not authorized')
 
-  await deleteRoom(roomId)
-
+  const response = await deleteRoom(roomId)
   revalidatePath('/your-rooms')
+  return response?.deletedId ? 'ok' : 'error'
 }

@@ -26,6 +26,7 @@ import { ListTags } from '@/components/listTags'
 import { splitTags } from '@/lib/utils'
 import { unstable_noStore } from 'next/cache'
 import { deleteUserRoom } from './actions'
+import { useToast } from '@/components/ui/use-toast'
 
 export default function RoomCard({ room }: { room: Room }) {
   return (
@@ -73,6 +74,7 @@ export default function RoomCard({ room }: { room: Room }) {
 
 export function AlertDialogPopup({ roomId }: { roomId: string }) {
   unstable_noStore()
+  const { toast } = useToast()
   return (
     <AlertDialogContent>
       <AlertDialogHeader>
@@ -84,7 +86,18 @@ export function AlertDialogPopup({ roomId }: { roomId: string }) {
       </AlertDialogHeader>
       <AlertDialogFooter>
         <AlertDialogCancel>Cancel</AlertDialogCancel>
-        <AlertDialogAction onClick={() => deleteUserRoom(roomId)}>
+        <AlertDialogAction
+          onClick={() =>
+            deleteUserRoom(roomId).then((res) => {
+              res === 'ok' &&
+                toast({
+                  variant: 'destructive',
+                  title: 'Room deleted succesfully',
+                  description: 'The room has been deleted with success',
+                })
+            })
+          }
+        >
           Delete
         </AlertDialogAction>
       </AlertDialogFooter>

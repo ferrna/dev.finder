@@ -8,7 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Airplay, LogIn, LogOut } from 'lucide-react'
+import { Airplay, LogIn, LogOut, UserRound } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import Image from 'next/image'
@@ -26,16 +26,23 @@ function Dropdown() {
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           &nbsp;
-          {session.data?.user?.name}
+          <span className="hidden md:inline">{session.data?.user?.name}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem className="cursor-pointer" asChild>
-          <Link href="/your-rooms">
+          <Link href="/my-account">
+            <UserRound />
+            &nbsp; Account
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem className="cursor-pointer" asChild>
+          <Link href="/your-account">
             <Airplay />
             &nbsp; Your Rooms
           </Link>
         </DropdownMenuItem>
+        <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={() =>
             signOut({
@@ -55,16 +62,16 @@ export default function Header() {
   const session = useSession()
   const isLoggedIn = !!session.data
   return (
-    <header className="py-2 bg-gray-100 bg-transparent dark:bg-gray-900 container mx-auto z-10 relative">
+    <header className="py-2 bg-gray-100 bg-transparent dark:bg-gray-900 w-full px-8 z-10 relative">
       <div className="flex justify-between items-center">
         <Link
           href="/"
-          className="flex items-center text-xl font-medium cursor-pointer
+          className="min-w-[60px] flex items-center text-xl font-medium cursor-pointer
           text-ring dark:text-foreground hover:text-blue-400
           dark:hover:text-blue-400"
         >
           <Image src="/icon.png" alt="Dev Finder" width={60} height={60} />
-          <span className="pl-1 tracking-tight">DevFinder</span>
+          <span className="pl-1 tracking-tight hidden md:block">DevFinder</span>
         </Link>
         <nav>
           <Button asChild variant={'ghost'} className="mr-2">

@@ -14,6 +14,8 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { createRoomAction } from './actions'
+import { useToast } from '@/components/ui/use-toast'
+import { useRouter } from 'next/navigation'
 
 const formSchema = z.object({
   name: z.string().min(1).max(50),
@@ -23,6 +25,8 @@ const formSchema = z.object({
 })
 
 export function CreateRoomForm() {
+  const router = useRouter()
+  const { toast } = useToast()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -33,8 +37,22 @@ export function CreateRoomForm() {
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    createRoomAction(values)
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    createRoomAction(values).then((res) => {
+      if (res.msg === 'ok') {
+        router.push(`/rooms/${res.roomId}`)
+        toast({
+          title: 'Room created',
+          description: 'The room has been succesfully created',
+        })
+      } else {
+        toast({
+          variant: 'error',
+          title: 'Error!',
+          description: "There's been an error while creating the room",
+        })
+      }
+    })
   }
   return (
     <div className="">

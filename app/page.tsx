@@ -18,7 +18,7 @@ export default function LandingPage() {
           />
         </div>
         <div className="mx-auto max-w-2xl py-6">
-          <div className="hidden sm:mb-8 sm:flex sm:justify-center">
+          <div className="hidden sm:mt-8 sm:flex sm:justify-center">
             <Image src="/icon.png" width={200} height={200} alt="Devfinder logo" />
           </div>
           <div className="text-center">

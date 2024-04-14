@@ -47,7 +47,7 @@ export default function SearchBar() {
                 <FormControl>
                   <Input
                     {...field}
-                    className="w-[440px]"
+                    className="w-[280px] md:w-[440px]"
                     placeholder="Filter rooms by language, libraries, such as typescript, nextjs, python"
                   />
                 </FormControl>

@@ -33,22 +33,25 @@ function isValidUUID(uuid: string) {
 }
 
 export async function deleteRoom(roomId: string) {
-  const deletedRoom = await db.delete(room).where(eq(room.id, roomId))
-  if (deletedRoom) return 'Room deleted successfully'
+  const deletedRoom = await db
+    .delete(room)
+    .where(eq(room.id, roomId))
+    .returning({ deletedId: room.id })
+  return deletedRoom[0]
 }
 
 export async function editRoom(roomData: Omit<Room, 'userId'>, userId: string) {
-  await db
+  const editedRoom = await db
     .update(room)
     .set({ ...roomData, userId })
     .where(eq(room.id, roomData.id))
+    .returning({ updatedId: room.id })
+  return editedRoom[0]
 }
 export async function createRoom(roomData: Omit<Room, 'userId' | 'id'>, userId: string) {
   const createdRoom = await db
     .insert(room)
     .values({ ...roomData, userId })
     .returning({ insertedId: room.id })
-  return createdRoom[0]?.insertedId
-    ? { response: 'ok', insertedId: createdRoom[0]?.insertedId }
-    : { response: 'could not create room' }
+  return createdRoom[0]
 }

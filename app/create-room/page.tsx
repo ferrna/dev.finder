@@ -16,7 +16,7 @@ export default function CreateRoom() {
   }
 
   return (
-    <div className="container p-24 mx-auto flex flex-col gap-8 pt-12">
+    <div className="flex flex-col gap-8 p-6 pt-10 pb-20 md:container md:px-16 md:pt-14 lg:px-20">
       <div className="flex gap-4 items-center">
         <Button asChild variant={'ghost'}>
           <Link href={`${referer}`}>

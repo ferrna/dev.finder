@@ -9,7 +9,7 @@ export default async function EditRoom({ params }: { params: { roomId: string } 
   unstable_noStore()
   const room = await getRoom(params.roomId)
   return (
-    <div className="container p-24 mx-auto flex flex-col gap-8 pt-12">
+    <div className="flex flex-col gap-8 p-6 pt-10 pb-20 md:container md:px-16 md:pt-14 lg:px-20">
       <div className="flex justify-between items-center">
         <h2 className="text-4xl font-bold">Edit room: {room?.name}</h2>
         <Button asChild variant={'ghost'} size={'icon'}>

@@ -15,6 +15,8 @@ import {
 import { Input } from '@/components/ui/input'
 import { editRoomAction } from './actions'
 import { Room } from '@/db/schema'
+import { useToast } from '@/components/ui/use-toast'
+import { useRouter } from 'next/navigation'
 
 const formSchema = z.object({
   name: z.string().min(1).max(50),
@@ -24,6 +26,8 @@ const formSchema = z.object({
 })
 
 export function EditRoomForm({ room }: { room: Room }) {
+  const router = useRouter()
+  const { toast } = useToast()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -35,7 +39,20 @@ export function EditRoomForm({ room }: { room: Room }) {
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    editRoomAction(values, room.id)
+    editRoomAction(values, room.id).then((res) => {
+      router.push('/your-rooms')
+      res === 'ok'
+        ? toast({
+            variant: 'success',
+            title: 'Room edited succesfully',
+            description: 'The room has been updated with success',
+          })
+        : toast({
+            variant: 'error',
+            title: 'Error editing room',
+            description: "There's been an error while editing the room",
+          })
+    })
   }
   return (
     <div className="">
