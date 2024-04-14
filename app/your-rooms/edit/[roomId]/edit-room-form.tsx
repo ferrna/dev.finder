@@ -85,7 +85,7 @@ export function EditRoomForm({ room }: { room: Room }) {
                     placeholder="An application to help pair program with random devs online"
                   />
                 </FormControl>
-                <FormDescription>Please describe what you'll coding on.</FormDescription>
+                <FormDescription>{`Please describe what you'll coding on.`}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -101,8 +101,8 @@ export function EditRoomForm({ room }: { room: Room }) {
                   <Input {...field} placeholder="typescript, nextjs, tailwind" />
                 </FormControl>
                 <FormDescription>
-                  List the programming languages, frameworks, libraries you'll working
-                  with so people can know what you're working on.
+                  {`List the programming languages, frameworks, libraries you'll working
+                  with so people can know what you're working on.`}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
