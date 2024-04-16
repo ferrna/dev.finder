@@ -9,7 +9,8 @@
 
 **Deployment** [https://dev-finder-rose.vercel.app](https://dev-finder-rose.vercel.app)  
     
-
+Stack: Nextjs, Shadcn, DrizzleORM, PostgresSQL, Next-auth, GetStream, AWS RDS   
+    
 First, run the development server:
 
 ```bash
