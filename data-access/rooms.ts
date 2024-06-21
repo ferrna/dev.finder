@@ -22,7 +22,7 @@ export async function getUserRooms() {
   return rooms
 }
 
-export async function getRoom(roomId: string) {
+export async function getRoom(roomId: string): Promise<Room | undefined> {
   if (!isValidUUID(roomId)) return
   return await db.query.room.findFirst({ where: eq(room.id, roomId) })
 }

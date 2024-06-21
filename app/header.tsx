@@ -20,14 +20,20 @@ function Dropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <Button variant={'ghost'} style={{ display: 'flex', alignItems: 'center' }}>
+        {/* shadcn Button styles */}
+        <div
+          className="flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium
+          ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2
+          focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50
+          hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+        >
           <Avatar>
             <AvatarImage src={session.data?.user?.image ?? ''} />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           &nbsp;
           <span className="hidden md:inline">{session.data?.user?.name}</span>
-        </Button>
+        </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem className="cursor-pointer" asChild>

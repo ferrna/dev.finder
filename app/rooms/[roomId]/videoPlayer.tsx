@@ -4,6 +4,7 @@ import {
   Call,
   CallControls,
   CallParticipantsList,
+  LoadingIndicator,
   SpeakerLayout,
   StreamCall,
   StreamTheme,
@@ -22,47 +23,61 @@ export function VideoPlayer({ room }: { room: Room }) {
   const session = useSession()
 
   const [client, setClient] = useState<StreamVideoClient | null>(null)
+  const [showParticipants, setShowParticipants] = useState<boolean>(true)
   const [call, setCall] = useState<Call | null>(null)
   const router = useRouter()
   useEffect(() => {
-    if (!room) return
-    if (!session.data) {
-      return
+    if (!room || !session.data) return;
+
+    const initVideo = async () => {
+      const userId = session.data?.user.id
+      const client = new StreamVideoClient({
+        apiKey,
+        user: {
+          id: userId,
+          name: session.data.user.name ?? undefined,
+          image: session.data.user.image ?? undefined,
+        },
+        tokenProvider: () => generateToken(),
+      });
+      setClient(client)
+      const call = client.call('default', room.id)
+      await call.join({ create: true })
+      setCall(call)
     }
-    const userId = session.data?.user.id
-    const client = new StreamVideoClient({
-      apiKey,
-      user: {
-        id: userId,
-        name: session.data.user.name ?? undefined,
-        image: session.data.user.image ?? undefined,
-      },
-      tokenProvider: () => generateToken(),
-    })
-    setClient(client)
-    const call = client.call('default', room.id)
-    call.join({ create: true })
-    setCall(call)
+
+    initVideo()
+    
     return () => {
-      call
-        .leave()
-        .then((res) => client.disconnectUser())
-        .catch((err) => console.log(err))
+      const cleanup = async () => {
+        if (call && client) {
+          try {
+            await call.leave();
+            await client.disconnectUser();
+          } catch (err) {
+            console.log(err);
+          }
+        }
+      };
+      cleanup();
     }
   }, [session, room])
 
+  if (!client || !call) {
+    return <LoadingIndicator />
+  }
+  
   return (
-    client &&
-    call && (
-      <StreamVideo client={client}>
-        <StreamTheme>
-          <StreamCall call={call}>
-            <SpeakerLayout />
-            <CallControls onLeave={() => router.push('/browse')} />
-            <CallParticipantsList onClose={() => undefined} />
-          </StreamCall>
-        </StreamTheme>
-      </StreamVideo>
-    )
+    <StreamVideo client={client}>
+      <StreamTheme>
+        <StreamCall call={call}>
+          <SpeakerLayout />
+          <CallControls onLeave={() => router.push('/browse')} />
+          {showParticipants && (
+            <CallParticipantsList onClose={() => setShowParticipants(false)} />
+          )}
+        </StreamCall>
+      </StreamTheme>
+    </StreamVideo>
   )
 }
