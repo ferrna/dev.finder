@@ -1,0 +1,27 @@
+.description {
+  --value-n-lines: 2;
+  overflow: hidden;
+  display: -webkit-box;
+  -moz-box-orient: vertical;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  text-overflow: ellipsis;
+  height: calc(80px/(4/var(--value-n-lines)));
+  max-height: 80px;
+  transition: height 0.5s;
+}
+.showall {
+  --value-n-lines: 4;
+  -webkit-line-clamp: unset;
+}
+
+.more {
+  height: 23px;
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  line-height: 20px;
+  width: 80px;
+  font-size: 14px;
+  font-weight: 700;
+}
