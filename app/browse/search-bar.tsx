@@ -7,7 +7,24 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from '@/component
 import { Input } from '@/components/ui/input'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { SearchIcon } from 'lucide-react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { getRoomsCount } from '@/data-access/rooms'
+
+async function getLocalRoomsCount() {
+  'use client'
+  const roomsCount = localStorage.getItem('roomsCount')
+  const lastFetch: Date | null = new Date(
+    parseInt(localStorage['roomsCountDataDate'], 10)
+  )
+  let rooms: number | undefined
+  if (!roomsCount || (lastFetch && lastFetch.getDate() < new Date().getDate() - 5)) {
+    rooms = await getRoomsCount()
+    console.dir(rooms)
+    localStorage.setItem('roomsCount', '' + rooms)
+    localStorage.setItem('roomsCountDataDate', '' + new Date().getTime())
+  }
+  return rooms ?? Number(roomsCount)
+}
 
 const formSchema = z.object({
   search: z.string().min(0).max(50),
@@ -24,9 +41,21 @@ export default function SearchBar() {
       search: query.get('search') ?? '',
     },
   })
+
+  const [roomsCount, setRoomsCount] = useState<number | null>(null)
+
   useEffect(() => {
     form.setValue('search', search ?? '')
   }, [search, form])
+
+  useEffect(() => {
+    async function getNumberOfRooms() {
+      const count = await getLocalRoomsCount()
+      setRoomsCount(count)
+      return
+    }
+    getNumberOfRooms()
+  }, [])
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     if (values.search) {
@@ -38,7 +67,7 @@ export default function SearchBar() {
   return (
     <div className="">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-2">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-2 w-full">
           <FormField
             control={form.control}
             name="search"
@@ -70,6 +99,11 @@ export default function SearchBar() {
               Clear
             </Button>
           )}
+          <div className="ml-auto flex items-center">
+            <span className="text-slate-700 dark:text-slate-700 text-sm">
+              {roomsCount && roomsCount + ' total rooms.'}
+            </span>
+          </div>
         </form>
       </Form>
     </div>

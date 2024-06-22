@@ -34,7 +34,7 @@ export default function RoomCard({ room }: { room: Room }) {
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="bg-image-stripes dark:bg-image-stripes-dark mb-4 border-b border-[#f5f7fb] border-[#091421]">
         <CardTitle>{room.name}</CardTitle>
         <CardDescription
           className={styles.description + (showMore ? styles.showall : '')}

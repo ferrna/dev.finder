@@ -13,10 +13,10 @@ import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import Image from 'next/image'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 function Dropdown() {
   const session = useSession()
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -64,9 +64,11 @@ function Dropdown() {
     </DropdownMenu>
   )
 }
+
 export default function Header() {
   const session = useSession()
   const isLoggedIn = !!session.data
+  const pathname = usePathname()
   return (
     <header className="py-2 bg-gray-100 bg-transparent dark:bg-gray-900 w-full px-8 z-10 relative">
       <div className="flex justify-between items-center">
@@ -80,11 +82,11 @@ export default function Header() {
           <span className="pl-1 tracking-tight hidden md:block">DevFinder</span>
         </Link>
         <nav>
-          <Button asChild variant={'ghost'} className="mr-2">
+          <Button asChild variant={'ghost'} className={`mr-2 font-semibold ${pathname === '/browse' && 'bg-accent text-accent-foreground dark:bg-transparent dark:hover:bg-accent'}`}>
             <Link href="/browse">Browse</Link>
           </Button>
           {isLoggedIn && (
-            <Button asChild variant={'ghost'}>
+            <Button asChild variant={'ghost'} className={`${pathname === '/your-rooms' && 'font-semibold bg-accent text-accent-foreground dark:bg-transparent dark:hover:bg-accent'}`}>
               <Link href="/your-rooms">Your Rooms</Link>
             </Button>
           )}

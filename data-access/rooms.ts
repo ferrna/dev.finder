@@ -2,16 +2,29 @@
 import { db } from '@/db'
 import { Room, room } from '@/db/schema'
 import { getSession } from '@/lib/auth'
-import { eq, like } from 'drizzle-orm'
+import { desc, eq, like, or, sql } from 'drizzle-orm'
 
-export async function getRooms(search: string | undefined) {
+export async function getRooms(search: string | undefined): Promise<Room[] | null> {
   const rooms = search
     ? await db
         .select()
         .from(room)
-        .where(like(room.tags, `%${search}%`))
-    : await db.query.room.findMany()
+        .where(or(
+          like(room.tags, `%${search}%`), 
+          like(room.name, `%${search}%`)
+        )).orderBy(desc(room.id)).limit(12)
+    : await db.select()
+    .from(room).orderBy(desc(room.id)).limit(12)
   return rooms
+}
+
+export async function getRoomsCount() {
+  const roomsCount = await db
+    .select({
+      count: sql<number>`cast(count(${room.id}) as int)`,
+    })
+    .from(room)
+  return roomsCount && roomsCount[0].count
 }
 
 export async function getUserRooms() {

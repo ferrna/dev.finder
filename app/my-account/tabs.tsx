@@ -46,11 +46,11 @@ export function AccountTabs({ userSession }: any) {
           <CardContent className="space-y-2">
             <div className="space-y-1">
               <Label htmlFor="name">Name</Label>
-              <Input id="name" defaultValue={`${userSession.name}`} readOnly />
+              <Input id="name" defaultValue={`${userSession.name}`} readOnly/>
             </div>
             <div className="space-y-1">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" defaultValue={`${userSession.email}`} readOnly />
+              <Input id="email" defaultValue={`${userSession.email}`} readOnly/>
             </div>
           </CardContent>
           <CardFooter className="justify-center gap-2">
